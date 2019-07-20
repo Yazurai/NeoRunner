@@ -79,10 +79,12 @@ public class PlayerController : MonoBehaviour {
         }
     }
 
-    private void Deactivate() {
-        Active = false;
-        Tm.SetInactive();
-        gameObject.SetActive(false);
+    public void Deactivate() {
+        if (Active) {
+            Active = false;
+            Tm.SetInactive();
+            gameObject.SetActive(false);
+        }
     }
 
     private int OutputToDirection(float[] output) {
@@ -95,7 +97,7 @@ public class PlayerController : MonoBehaviour {
         return MaxIndex;
     }
 
-    public float ScanFitness() {
+    private float ScanFitness() {
         float Fitness = 0;
         RaycastHit hit;
 
@@ -107,7 +109,7 @@ public class PlayerController : MonoBehaviour {
         return Fitness;
     }
 
-    public float[] Scan() {
+    private float[] Scan() {
         float[] Inputs = new float[3];
         for (int i = 0; i < Inputs.Length; i++) {
             RaycastHit hit;

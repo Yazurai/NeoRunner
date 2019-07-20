@@ -6,8 +6,9 @@ using UnityEngine.UI;
 public class SliderTextController : MonoBehaviour {
     public Text ValueText;
     public Slider ValueSlider;
+    public int multiplier;
 
     public void SetText() {
-        ValueText.text = ValueSlider.value.ToString();
+        ValueText.text = (multiplier * ValueSlider.value).ToString();
     }
 }

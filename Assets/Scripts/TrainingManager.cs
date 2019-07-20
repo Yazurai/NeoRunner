@@ -8,14 +8,17 @@ public class TrainingManager : MonoBehaviour {
     public GameObject Prefab;
     public BlockGenerator BlockGen; 
     public int ValueCount;
-    
+    public Slider CountPerGenSlider;
+    public InputField SeedInput;
+    public Slider SpeedSlider;
 
+    private bool TrainingActive;
     private int CountPerGeneration;
     private int Seed;
     private int BlockSeed;
-    private int speed;
+    private int Speed;
 
-    private int ActiveCount;
+    public int ActiveCount;
     List<GameObject> Players;
 
     public List<float> HighestFitness;
@@ -56,36 +59,52 @@ public class TrainingManager : MonoBehaviour {
         HighestFitness = new List<float>();
         HighestFitnessDna = new List<string>();
         AverageFitness = new List<float>();
+    }
 
-        StartFirstGeneration();
+    private bool SetupTraining() {
+        CountPerGeneration = (int)CountPerGenSlider.value * 2;
+        Debug.Log(CountPerGeneration);
+        bool success = int.TryParse(SeedInput.text, out Seed);
+        Speed = (int)SpeedSlider.value;
+        return success;
     }
 
     public void StartFirstGeneration() {
-        Time.timeScale = speed;
-        Random.InitState(Seed);
+        if (SetupTraining()) {
+            TrainingActive = true;
+            Time.timeScale = Speed;
+            Random.InitState(Seed);
 
-        //BlockGen.Seed = Random.Range(0, 10000);
-        BlockGen.StartGame();
+            BlockGen.Seed = Random.Range(0, 10000);
+            BlockGen.StartGame();
 
-        Players.Clear();
-        for (int i = 0; i < CountPerGeneration; i++) {
-            GameObject newPlayer = Instantiate(Prefab, StartPosition, Quaternion.identity);
-            newPlayer.GetComponent<PlayerController>().Set(Random.Range(0, 10000));
-            newPlayer.GetComponent<PlayerController>().Tm = this;
-            Players.Add(newPlayer);
+            Players.Clear();
+            for (int i = 0; i < CountPerGeneration; i++) {
+                GameObject newPlayer = Instantiate(Prefab, StartPosition, Quaternion.identity);
+                newPlayer.GetComponent<PlayerController>().Set(Random.Range(0, 10000));
+                newPlayer.GetComponent<PlayerController>().Tm = this;
+                Players.Add(newPlayer);
+            }
+            ActiveCount = CountPerGeneration;
+        } 
+    }
+
+    public void Finish() {
+        TrainingActive = false;
+        for (int i = 0; i < Players.Count; i++) {
+            Players[i].GetComponent<PlayerController>().Deactivate();
         }
-        ActiveCount = CountPerGeneration;
     }
 
     public void SetInactive() {
         ActiveCount--;
-        if (ActiveCount <= 0) {
-            BlockGen.EndGame();
+        if (ActiveCount <= 0 && TrainingActive) {
             EvaluateGeneration();
         }
+        BlockGen.EndGame();
     }
 
-    public void CreateNewGeneration(List<float[]> dnaData) {
+    private void CreateNewGeneration(List<float[]> dnaData) {
         BlockGen.StartGame();
 
         Clear();
@@ -105,7 +124,7 @@ public class TrainingManager : MonoBehaviour {
         Players.Clear();
     }
 
-    public void EvaluateGeneration() {
+    private void EvaluateGeneration() {
         float max = 0;
         string maxDna = "";
         float sum = 0;
@@ -146,7 +165,7 @@ public class TrainingManager : MonoBehaviour {
         return returnValue;
     }
 
-    public List<float[]> EvolveDna() {
+    private List<float[]> EvolveDna() {
         List<float[]> newGenerationDna = new List<float[]>();
 
         float Sum = AverageFitness[AverageFitness.Count - 1] * CountPerGeneration;
