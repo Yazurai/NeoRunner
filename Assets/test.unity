@@ -734,10 +734,11 @@ MonoBehaviour:
   ValueCount: 24
   CountPerGenSlider: {fileID: 376792348}
   SeedInput: {fileID: 673337646}
-  TrainingSpeedSlider: {fileID: 0}
-  DNAInput: {fileID: 0}
-  SingleSimSpeedSlider: {fileID: 0}
-  PresetDNAToggle: {fileID: 0}
+  TrainingSpeedSlider: {fileID: 699828068}
+  DNAInput: {fileID: 445936406}
+  SingleSimSpeedSlider: {fileID: 588634689}
+  PresetDNAToggle: {fileID: 1240051806}
+  TrainingActive: 0
   ActiveCount: 0
   HighestFitness: []
   HighestFitnessDna: []
@@ -3658,7 +3659,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1104594456}
   m_LocalRotation: {x: -0.0020423096, y: -0.8236326, z: 0.5671123, w: -0.0029664657}
-  m_LocalPosition: {x: 0.2799337, y: 27.147339, z: 10.794767}
+  m_LocalPosition: {x: 0.3, y: 31.6, z: 13.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
