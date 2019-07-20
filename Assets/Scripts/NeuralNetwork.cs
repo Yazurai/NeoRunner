@@ -145,7 +145,10 @@ public class NeuralNetwork : MonoBehaviour {
             }
         }
         for (int i = 0; i < OutputCount; i++) {
-            Output += OutputBiases[i] + ",";
+            Output += OutputBiases[i];
+            if (i < OutputCount - 1) {
+                Output += ",";
+            }
         }
         return Output;
     }

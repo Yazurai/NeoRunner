@@ -10,9 +10,13 @@ public class TrainingManager : MonoBehaviour {
     public int ValueCount;
     public Slider CountPerGenSlider;
     public InputField SeedInput;
-    public Slider SpeedSlider;
+    public Slider TrainingSpeedSlider;
 
-    private bool TrainingActive;
+    public InputField DNAInput;
+    public Slider SingleSimSpeedSlider;
+    public Toggle PresetDNAToggle;
+
+    public bool TrainingActive;
     private int CountPerGeneration;
     private int Seed;
     private int BlockSeed;
@@ -28,7 +32,7 @@ public class TrainingManager : MonoBehaviour {
     public void WriteAllData() {
         int FileNumber = 1;
         string FileName = "data";
-        while (File.Exists(FileName + FileNumber)) {
+        while (File.Exists(FileName + FileNumber + ".txt")) {
             FileNumber++;
         }
         FileName += FileNumber;
@@ -56,6 +60,8 @@ public class TrainingManager : MonoBehaviour {
     private void Start() {
         Players = new List<GameObject>();
 
+        Random.InitState((int)System.DateTime.Now.Ticks);
+
         HighestFitness = new List<float>();
         HighestFitnessDna = new List<string>();
         AverageFitness = new List<float>();
@@ -63,10 +69,31 @@ public class TrainingManager : MonoBehaviour {
 
     private bool SetupTraining() {
         CountPerGeneration = (int)CountPerGenSlider.value * 2;
-        Debug.Log(CountPerGeneration);
         bool success = int.TryParse(SeedInput.text, out Seed);
-        Speed = (int)SpeedSlider.value;
+        Speed = (int)TrainingSpeedSlider.value;
         return success;
+    }
+
+    public void StartSingleSimulation() {
+        TrainingActive = false;
+        Speed = (int)SingleSimSpeedSlider.value;
+        Time.timeScale = Speed;
+
+        BlockGen.Seed = Random.Range(0, 10000);
+        BlockGen.StartGame();
+
+        GameObject newPlayer = Instantiate(Prefab, StartPosition, Quaternion.identity);
+        if (PresetDNAToggle.isOn) {
+            string DNA = "0.8906293,0.3015489,0.9443879,0.3542274,0.7237582,0.8975413,0.5546401,0.4386836,0.2549953,0.1301106,0.1518285,0.4063117,0.003078461,0.91996,0.8183527,0.3141254,0.5155931,0.001773477,0.4232495,0.9069897,0.02328098,0.2610578,0.2247642,0.2155918";
+            newPlayer.GetComponent<PlayerController>().Set(DNA);
+        } else {
+            newPlayer.GetComponent<PlayerController>().Set(DNAInput.text);
+        }
+        
+        newPlayer.GetComponent<PlayerController>().Tm = this;
+        Players.Add(newPlayer);
+
+        ActiveCount = 1;
     }
 
     public void StartFirstGeneration() {
@@ -99,14 +126,16 @@ public class TrainingManager : MonoBehaviour {
     public void SetInactive() {
         ActiveCount--;
         if (ActiveCount <= 0 && TrainingActive) {
+            BlockGen.EndGame();
             EvaluateGeneration();
+        } else {
+            if (!TrainingActive) {
+                BlockGen.EndGame();
+            }
         }
-        BlockGen.EndGame();
     }
 
     private void CreateNewGeneration(List<float[]> dnaData) {
-        BlockGen.StartGame();
-
         Clear();
         for (int i = 0; i < CountPerGeneration; i++) {
             GameObject newPlayer = Instantiate(Prefab, StartPosition, Quaternion.identity);
@@ -115,6 +144,7 @@ public class TrainingManager : MonoBehaviour {
             newPlayer.GetComponent<PlayerController>().Tm = this;
         }
         ActiveCount = CountPerGeneration;
+        BlockGen.StartGame();
     }
 
     private void Clear() {

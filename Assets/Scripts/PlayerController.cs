@@ -5,10 +5,7 @@ public class PlayerController : MonoBehaviour {
     public int Sensors;
     public Rigidbody Rb;
     private bool Active = true;
-    public int seed;
     public TrainingManager Tm;
-    public bool InfoFromDNA;
-    public string DNA;
 
     public NeuralNetwork NN;
 
@@ -18,10 +15,6 @@ public class PlayerController : MonoBehaviour {
         NN.HiddenLayerCount = 3;
         NN.OutputCount = 3;
         NN.Initialise();
-        //Set(seed);
-        if (InfoFromDNA) {
-            NN.Set(DNA);
-        }
         StartCoroutine("Test");
     }
 
@@ -34,7 +27,10 @@ public class PlayerController : MonoBehaviour {
     }
 
     public void Set(int seed) {
-        this.seed = seed;
+        NN.Set(seed);
+    }
+
+    public void Set(string seed) {
         NN.Set(seed);
     }
 
