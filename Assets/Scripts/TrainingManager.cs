@@ -6,8 +6,7 @@ using UnityEngine.UI;
 public class TrainingManager : MonoBehaviour {
     public Vector3 StartPosition;
     public GameObject Prefab;
-    public BlockGenerator BlockGen;
-    public 
+    public BlockGenerator BlockGen; 
     public int ValueCount;
     
 
