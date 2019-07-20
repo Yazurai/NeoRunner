@@ -48,6 +48,7 @@ sysinfo.txt
 crashlytics-build.properties
 
 # Custom folders
+/Mono
 /DATA
 /Packages
 *.txt
