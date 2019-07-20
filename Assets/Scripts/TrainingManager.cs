@@ -1,16 +1,20 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TrainingManager : MonoBehaviour {
     public Vector3 StartPosition;
-    public int CountPerGeneration;
     public GameObject Prefab;
-    public int Seed;
-    public int BlockSeed;
     public BlockGenerator BlockGen;
+    public 
     public int ValueCount;
-    public int speed;
+    
+
+    private int CountPerGeneration;
+    private int Seed;
+    private int BlockSeed;
+    private int speed;
 
     private int ActiveCount;
     List<GameObject> Players;
@@ -48,8 +52,6 @@ public class TrainingManager : MonoBehaviour {
     }
 
     private void Start() {
-        Time.timeScale = speed;
-
         Players = new List<GameObject>();
 
         HighestFitness = new List<float>();
@@ -60,6 +62,7 @@ public class TrainingManager : MonoBehaviour {
     }
 
     public void StartFirstGeneration() {
+        Time.timeScale = speed;
         Random.InitState(Seed);
 
         //BlockGen.Seed = Random.Range(0, 10000);
@@ -181,7 +184,4 @@ public class TrainingManager : MonoBehaviour {
 
         return newGenerationDna;
     }
-
-    //0.1641158,0.899922,0.2659848,0.5886877,0.6645796,0.3119618,0.04158974,0.2639306,0.9880725,0.6294967,0.09893215,0.6426412,0.6037291,0.8179359,0.006338954,0.5279908,0.3507249,0.4387364,0.08021104,0.4338344,0.7026079,0.1391242,0.626871,0.08541703,
-    //0.05342102,0.3115221,0.2770197,0.01327813,0.4860693,0.659402,0.5989395,0.1773937,0.04986048,0.9246622,0.3800393,0.6275007,0.8003786,0.5774825,0.4455187,0.05006289,0.7854749,0.04258835,0.6059451,0.9106202,0.2305104,0.582977,0.6806455,0.975076,
 }
