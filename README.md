@@ -5,7 +5,7 @@ A machine learning project about the NN trying to dodge incoming blocks.
 
 ## Installing
 
-* Download from [here](/NeoRunner.rar)
+* Download from [here](https://github.com/Yazurai/NeoRunner/raw/master/NeoRunner.rar)
 * Unzip and run the .exe
 
 ## Running your own training or simulation
